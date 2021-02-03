@@ -8,8 +8,15 @@ const mongoose        = require('mongoose');
 const dotenv          = require('dotenv');
 dotenv.config();
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var indexRouter           = require('./routes/index.routes');
+var boardRouter           = require('./routes/board.routes');
+var boardAppendiceRouter  = require('./routes/board_appendice.routes');
+var checklistItemRouter   = require('./routes/checklist_item.routes');
+var commentRouter         = require('./routes/comment.routes');
+var labelRouter           = require('./routes/label.routes');
+var taskTypeRouter        = require('./routes/task_type.routes');
+var taskRouter            = require('./routes/task.routes');
+var userGroupRouter       = require('./routes/user_group.routes');
 
 var app = express();
 
@@ -49,15 +56,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(allowCrossDomain);
 
-
-
-
-
-
-
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+//routes
+app.use('/',                  indexRouter);
+app.use('/boards',            boardRouter);
+app.use('/board-appendices',  boardAppendiceRouter);
+app.use('/checklist-items',   checklistItemRouter);
+app.use('/comments',          commentRouter);
+app.use('/labels',            labelRouter);
+app.use('/task-types',        taskTypeRouter);
+app.use('/tasks',             taskRouter);
+app.use('/user-groups',       userGroupRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
