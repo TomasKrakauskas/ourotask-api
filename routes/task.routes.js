@@ -21,10 +21,10 @@ router.get('/:taskID', auth_middleware.validate, async (req, res) => {
     }
 });
 
-router.get('/board/:boardID', auth_middleware.validate, async (req, res) => {
+router.get('/sprint/:sprintID', auth_middleware.validate, async (req, res) => {
     try {
 
-        let tasks = await task_lib.getAllBoard(req.params.boardID);
+        let tasks = await task_lib.getAllSprint(req.params.sprintID);
         return res.status(200).send({
             message: 'Success!',
             tasks: tasks,
@@ -36,10 +36,10 @@ router.get('/board/:boardID', auth_middleware.validate, async (req, res) => {
         return res.status(500).send({ message: 'Something went wrong!' });
     }
 });
-router.get('/board/:boardID/type/:task_typeID', auth_middleware.validate, async (req, res) => {
+router.get('/sprint/:sprintID/type/:task_typeID', auth_middleware.validate, async (req, res) => {
     try {
 
-        let tasks = await task_lib.getAllType(req.params.boardID, req.params.task_typeID);
+        let tasks = await task_lib.getAllType(req.params.sprintID, req.params.task_typeID);
         return res.status(200).send({
             message: 'Success!',
             tasks: tasks,
@@ -51,10 +51,10 @@ router.get('/board/:boardID/type/:task_typeID', auth_middleware.validate, async 
         return res.status(500).send({ message: 'Something went wrong!' });
     }
 });
-router.get('/board/:boardID/assignee/:assigneeID', auth_middleware.validate, async (req, res) => {
+router.get('/sprint/:sprintID/assignee/:assigneeID', auth_middleware.validate, async (req, res) => {
     try {
 
-        let tasks = await task_lib.getAllAssignee(req.params.boardID, req.params.assigneeID);
+        let tasks = await task_lib.getAllAssignee(req.params.sprintID, req.params.assigneeID);
         return res.status(200).send({
             message: 'Success!',
             tasks: tasks,
@@ -66,10 +66,10 @@ router.get('/board/:boardID/assignee/:assigneeID', auth_middleware.validate, asy
         return res.status(500).send({ message: 'Something went wrong!' });
     }
 });
-router.get('/board/:boardID/status/:status', auth_middleware.validate, async (req, res) => {
+router.get('/sprint/:sprintID/status/:status', auth_middleware.validate, async (req, res) => {
     try {
 
-        let tasks = await task_lib.getAllStatus(req.params.boardID, req.params.status);
+        let tasks = await task_lib.getAllStatus(req.params.sprintID, req.params.status);
         return res.status(200).send({
             message: 'Success!',
             tasks: tasks,
@@ -81,10 +81,10 @@ router.get('/board/:boardID/status/:status', auth_middleware.validate, async (re
         return res.status(500).send({ message: 'Something went wrong!' });
     }
 });
-router.get('/board/:boardID/creator/:creatorID', auth_middleware.validate, async (req, res) => {
+router.get('/sprint/:sprintID/creator/:creatorID', auth_middleware.validate, async (req, res) => {
     try {
 
-        let tasks = await task_lib.getAllAssignee(req.params.boardID, req.params.creatorID);
+        let tasks = await task_lib.getAllAssignee(req.params.sprintID, req.params.creatorID);
         return res.status(200).send({
             message: 'Success!',
             tasks: tasks,
@@ -98,11 +98,11 @@ router.get('/board/:boardID/creator/:creatorID', auth_middleware.validate, async
 });
 
 /* POST */
-router.post('/:boardID', auth_middleware.validate, async (req, res) => {
+router.post('/:sprintID', auth_middleware.validate, async (req, res) => {
     if(!req.body) return res.status(400).send({ message: 'Body cannot be empty!' });
     else try {
 
-        let task = await task_lib.create(req.params.boardID, res.locals._id, req.body.task_type, req.body.title, req.body.description, req.body.due_date);
+        let task = await task_lib.create(req.params.sprintID, res.locals._id, req.body.task_type, req.body.title, req.body.description, req.body.due_date);
         return res.status(200).send({
             message: 'Success!',
             task: task 

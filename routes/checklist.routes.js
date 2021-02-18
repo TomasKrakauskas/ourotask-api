@@ -3,17 +3,17 @@ var router = express.Router();
 
 const auth_middleware = require('../middleware/verify_session');
 
-const checklist_item_lib = require('../lib/checklist_item.lib');
+const checklist_lib = require('../lib/checklist.lib');
 
 
 /* GET */
-router.get('/:checklist_itemID', auth_middleware.validate, async (req, res) => {
+router.get('/:checklistID', auth_middleware.validate, async (req, res) => {
     try {
 
-        let checklist_item = await checklist_item_lib.getOne(req.params.checklist_itemID);
+        let checklist = await checklist_lib.getOne(req.params.checklistID);
         return res.status(200).send({
             message: 'Success!',
-            checklist_item: checklist_item 
+            checklist: checklist 
         });
 
     } catch (e) {
@@ -22,14 +22,14 @@ router.get('/:checklist_itemID', auth_middleware.validate, async (req, res) => {
     }
 });
 
-router.get('/all/:checklistID', auth_middleware.validate, async (req, res) => {
+router.get('/all/:taskID', auth_middleware.validate, async (req, res) => {
     try {
 
-        let checklist_items = await checklist_item_lib.getAll(req.params.checklistID);
+        let checklists = await checklist_lib.getAll(req.params.taskID);
         return res.status(200).send({
             message: 'Success!',
-            checklist_items: checklist_items,
-            count: checklist_items.length 
+            checklists: checklists,
+            count: checklists.length 
         });
 
     } catch (e) {
@@ -43,10 +43,10 @@ router.post('/task/:taskID', auth_middleware.validate, async (req, res) => {
     if(!req.body) return res.status(400).send({ message: 'Body cannot be empty!' });
     else try {
 
-        let checklist_item = await checklist_item_lib.create(req.body.task_typeID, req.params.taskID, req.body.title);
+        let checklist = await checklist_lib.create(req.body.task_typeID, req.params.taskID, req.body.title);
         return res.status(200).send({
             message: 'Success!',
-            checklist_item: checklist_item 
+            checklist: checklist 
         });
 
     } catch (e) {
@@ -56,14 +56,14 @@ router.post('/task/:taskID', auth_middleware.validate, async (req, res) => {
 });
 
 /* PUT */
-router.put('/:checklist_itemID', auth_middleware.validate, async (req, res) => {
+router.put('/:checklistID', auth_middleware.validate, async (req, res) => {
     if(!req.body) return res.status(400).send({ message: 'Body cannot be empty!' });
     else try {
 
-        let checklist_item_id = await checklist_item_lib.update(req.params.checklist_itemID, req.body.task_type, req.body.status, req.body.title);
+        let checklist_id = await checklist_lib.update(req.params.checklistID, req.body.task_type, req.body.status, req.body.title);
         return res.status(200).send({
             message: 'Success!',
-            checklist_item_id: checklist_item_id 
+            checklist_id: checklist_id 
         });
 
     } catch (e) {
@@ -72,13 +72,13 @@ router.put('/:checklist_itemID', auth_middleware.validate, async (req, res) => {
     }
 });
 /* DELETE */
-router.delete('/:checklist_itemID', auth_middleware.validate, async (req, res) => {
+router.delete('/:checklistID', auth_middleware.validate, async (req, res) => {
     try {
 
-        let checklist_item = await checklist_item_lib.deleteOne(req.params.checklist_itemID);
+        let checklist = await checklist_lib.deleteOne(req.params.checklistID);
         return res.status(200).send({
             message: 'Success!',
-            checklist_item: checklist_item 
+            checklist: checklist 
         });
 
     } catch (e) {

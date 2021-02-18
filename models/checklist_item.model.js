@@ -2,27 +2,26 @@
 const mongoose = require('mongoose'); 
 const Schema = mongoose.Schema;
 
-const Task = require('./task.model');
-const task_type = require('./task_type.model');
+const Task_type = require('./task_type.model');
+const Checklist_item = require('./checklist.model');
 
-const checkListSchema = mongoose.Schema({ 
+const checkListItemSchema = mongoose.Schema({ 
 
     task_type: {
         type: Schema.Types.ObjectId,
         ref: 'Task-type',
         required: true
     },
-    task_id: {
+    checklist_id: {
         type: Schema.Types.ObjectId,
-        ref: 'Task',
+        ref: 'Checklist',
         required: true
     },
     status: String,
     title: String,
-    counter_code: String
     
 }, { 
     timestamps: true 
 }); 
 
-module.exports = mongoose.model('Checklist-item', checkListSchema);
+module.exports = mongoose.model('Checklist-item', checkListItemSchema);

@@ -4,15 +4,15 @@ const Schema = mongoose.Schema;
 const User          = require('./user.model');
 const User_group    = require('./user_group.model');
 
-const Board     = require('./board.model');
+const Sprint     = require('./sprint.model');
 const Task_type = require('./task_type.model');
 const Label     = require('./label.model');
 
 const taskSchema = mongoose.Schema({
 
-    board_id: {
+    sprint_id: {
         type: Schema.Types.ObjectId,
-        ref: 'Board',
+        ref: 'Sprint',
         required: true
     },
     creator_id: {
