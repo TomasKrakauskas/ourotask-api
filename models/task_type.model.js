@@ -19,4 +19,4 @@ const labelSchema = mongoose.Schema({
     timestamps: true 
 }); 
 
-module.exports = mongoose.model('Label', labelSchema);
+module.exports = mongoose.model('Task_type', labelSchema);

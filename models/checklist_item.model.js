@@ -17,7 +17,6 @@ const checkListItemSchema = mongoose.Schema({
         ref: 'Checklist',
         required: true
     },
-    status: String,
     title: String,
     
 }, { 

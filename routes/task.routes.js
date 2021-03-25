@@ -162,7 +162,7 @@ router.put('/:taskID/assignee', auth_middleware.validate, async (req, res) => {
 });
 
 /* DELETE */
-router.delete('/:taskID/user/:labelID', auth_middleware.validate, async (req, res) => {
+router.delete('/:taskID/label/:labelID', auth_middleware.validate, async (req, res) => {
     try {
 
         let task_id = await task_lib.removelabel(req.params.taskID, req.params.labelID);

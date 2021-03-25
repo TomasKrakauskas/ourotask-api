@@ -1,5 +1,6 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const jwt     = require('jsonwebtoken');
 
 const auth_middleware = require('../middleware/verify_session');
 
@@ -117,7 +118,7 @@ router.post('/refresh', auth_middleware.refresh, async (req, res) => {
 /*POST register*/
 router.post('/register', async (req, res) => {
     if (!req.body) return res.status(400).send({ message: 'body cannot be empty!' });
-    else if (!req.body.name) return res.status(400).send({ message: 'name cannot be empty!' });
+    else if (!req.body.alias) return res.status(400).send({ message: 'name cannot be empty!' });
     else if (!req.body.email) return res.status(400).send({ message: 'email cannot be empty!' });
     else if (!req.body.password) return res.status(400).send({ message: 'password cannot be empty!' });
     else try {
@@ -152,13 +153,20 @@ router.put('/reset', async (req, res) => {
     else if (!req.body.email) return res.status(400).send({ message: 'email cannot be empty!' });
     else try {
 
-        let user_id = await auth.requestPasswordReset(req.body.email);
+        try {
+            var user_id = await auth.requestPasswordReset(req.body.email);
+        } catch(e) {
+            console.log(e);
+            return res.status(200).send({ message: 'Success!' })
+        }
+        
         let user = await users.getUser_byID(user_id);
         if (user) {
 
             // console.log(user);
-            let url = process.env.WEB + 'reset?email=' + user.email + '&secret=' + user.reset_token;
+            let url = process.env.WEB + 'auth?page=set&email=' + user.email + '&secret=' + user.reset_token;
             // let resp = await email_lib.password_reset(user.email, url);  
+            
             return res.status(200).send({
                 message: 'Success!'
             });
@@ -175,9 +183,17 @@ router.put('/reset', async (req, res) => {
 router.put('/reset/:token', async (req, res) => {
     if (!req.body) return res.status(400).send({ message: 'body cannot be empty!' });
     else if (!req.body.email) return res.status(400).send({ message: 'email cannot be empty!' });
+    else if (!req.body.token) return res.status(400).send({ message: 'token cannot be empty!' });
     else try {
+        try {
+            var user_id = await auth.resetPassword(req.params.token, req.body.email, req.body.password);
+        } catch(e) {
+            return res.status(401).send({
+                message: 'Invalid token!'
+            });
 
-        let user_id = await auth.resetPassword(req.params.token, req.body.email, req.body.password);
+        }
+        
         if (user_id) {
             // console.log(user_id);
             let user = await users.getUser_byID(user_id);
@@ -229,7 +245,6 @@ function passwordValidator(password) {
     if (!upper) return { value: false, error: 'Must contain atleast 1 upper case letter' }
     if (!lower) return { value: false, error: 'Must contain atleast 1 lower case letter' }
     if (password.replace(/\D/g, '').length <= 0) return { value: false, error: 'Must contain atleast 1 digit' }
-    if (password.replace(/[A-Za-z0-9]/g, '').length <= 0) return { value: false, error: 'Must contain atleast 1 symbol' }
 
     return { value: true, error: null }
 }

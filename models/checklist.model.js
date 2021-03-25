@@ -12,6 +12,7 @@ const checkListSchema = mongoose.Schema({
         ref: 'Task',
         required: true
     },
+    status: String,
     title: String,
     counter_code: String
     

@@ -39,11 +39,11 @@ router.get('/all/:checklistID', auth_middleware.validate, async (req, res) => {
 });
 
 /* POST */
-router.post('/task/:taskID', auth_middleware.validate, async (req, res) => {
+router.post('/task/:checklistID', auth_middleware.validate, async (req, res) => {
     if(!req.body) return res.status(400).send({ message: 'Body cannot be empty!' });
     else try {
 
-        let checklist_item = await checklist_item_lib.create(req.body.task_typeID, req.params.taskID, req.body.title);
+        let checklist_item = await checklist_item_lib.create(req.body.task_typeID, req.params.checklistID, req.body.title);
         return res.status(200).send({
             message: 'Success!',
             checklist_item: checklist_item 
@@ -60,7 +60,7 @@ router.put('/:checklist_itemID', auth_middleware.validate, async (req, res) => {
     if(!req.body) return res.status(400).send({ message: 'Body cannot be empty!' });
     else try {
 
-        let checklist_item_id = await checklist_item_lib.update(req.params.checklist_itemID, req.body.task_type, req.body.status, req.body.title);
+        let checklist_item_id = await checklist_item_lib.update(req.params.checklist_itemID, req.body.status, req.body.title);
         return res.status(200).send({
             message: 'Success!',
             checklist_item_id: checklist_item_id 
