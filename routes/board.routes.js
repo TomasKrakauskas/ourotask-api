@@ -52,6 +52,21 @@ router.get('/all/:creatorID/favorite', auth_middleware.validate, async (req, res
         return res.status(500).send({ message: 'Something went wrong!' });
     }
 });
+router.get('/all/:creatorID/non-favorite', auth_middleware.validate, async (req, res) => {
+    try {
+
+        let boards = await board_lib.getAllNonFavorite(req.params.creatorID);
+        return res.status(200).send({
+            message: 'Success!',
+            boards: boards,
+            count: boards.length 
+        });
+
+    } catch (e) {
+        console.log(e);
+        return res.status(500).send({ message: 'Something went wrong!' });
+    }
+});
 
 /* POST */
 router.post('/', auth_middleware.validate, async (req, res) => {
@@ -75,10 +90,10 @@ router.put('/:boardID', auth_middleware.validate, async (req, res) => {
     if(!req.body) return res.status(400).send({ message: 'Body cannot be empty!' });
     else try {
 
-        let board_id = await board_lib.update(req.params.boardID, req.body.title, req.body.description, req.body.favorite);
+        let board = await board_lib.update(req.params.boardID, req.body.title, req.body.description, req.body.favorite);
         return res.status(200).send({
             message: 'Success!',
-            board_id: board_id 
+            board_id: board.board_id 
         });
 
     } catch (e) {

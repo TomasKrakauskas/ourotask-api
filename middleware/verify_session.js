@@ -14,7 +14,6 @@ module.exports.validate = (req, res, next) =>{
       var decoded = jwt.verify(token, process.env.TOKEN_SECRET);
 
       if(!decoded) return res.status(401).send({ message: 'Not authorised' });
-
       res.locals._id = decoded._id;
 
       return next();
